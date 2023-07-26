@@ -5,13 +5,17 @@ using UnityEngine;
 public class PlayerBehavior : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5;
+    private float tempMoveSpeed = 5;
     [SerializeField] private float rotateSpeed = 25;
     [SerializeField] private float jumpHeight = 10f;
     private float i = 10f;
+    public bool win = false;
     void Update()
     {
         movePlayer(KeyCode.UpArrow, KeyCode.W, Vector3.forward);
         movePlayer(KeyCode.DownArrow, KeyCode.S, Vector3.back);
+        movePlayer(KeyCode.Q, Vector3.left);
+        movePlayer(KeyCode.E, Vector3.right);
         rotatePlayer(KeyCode.LeftArrow, KeyCode.A, Vector3.down);
         rotatePlayer(KeyCode.RightArrow, KeyCode.D, Vector3.up);
         Jump(KeyCode.Space, Vector3.up);
@@ -23,10 +27,33 @@ public class PlayerBehavior : MonoBehaviour
         if (other.CompareTag("Goal"))
         {
             Debug.Log("You Won!");
+            win = true;
+
         }
     }
-    private void OnTriggerStay(Collider other) { }
-    private void OnTriggerExit(Collider other) { }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Roof"))
+        {
+            jumpHeight = 0f;
+        }
+        if (other.CompareTag("Invisible Wall"))
+        {
+            tempMoveSpeed = moveSpeed;
+            moveSpeed = 0;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Roof"))
+        {
+            jumpHeight = 10f;
+        }
+        if (other.CompareTag("Invisible Wall"))
+        {
+            moveSpeed = tempMoveSpeed;
+        }
+    }
     // What to do when destroyed
     private void OnDestroy() { }
     // Movement methods

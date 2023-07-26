@@ -19,7 +19,7 @@ public class Appendages : MonoBehaviour
         {
             RotateInput.x = Mathf.Sin(offset + 1) / 10;
             transform.Rotate(RotateInput);
-            offset += 0.01f * speed;
+            offset += 0.01f * speed * Time.deltaTime;
         }
     }
 }
